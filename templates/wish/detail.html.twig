@@ -1,8 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Détail d'un souhait</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aspernatur autem, blanditiis commodi corporis debitis dignissimos distinctio eius, esse exercitationem fugiat hic illo incidunt inventore ipsa iure, laboriosam maxime mollitia necessitatibus officia officiis pariatur quaerat qui quos similique temporibus tenetur ullam! Deleniti facilis mollitia odio qui, rerum sed veritatis voluptatibus.</p>
+
+    <div class="card text-center">
+        <div class="card-header">
+            Souhait n°{{ wish.id }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ wish.title }}</h5>
+            <p class="card-text">{{ wish.description }}</p>
+            <a href="#" class="btn btn-primary">J'ai réalisé ce souhait !</a>
+        </div>
+        <div class="card-footer text-body-secondary">
+            Créé par {{ wish.author }} le {{ wish.dateCreated | date('d/m/Y') }} à {{ wish.dateCreated | date('H:i') }}
+            {% if wish.dateUpdated %}
+                <p>Modifié le {{ wish.dateUpdated | date('d/m/Y') }} à {{ wish.dateUpdated| date('H:i') }}</p>
+            {% endif %}
+        </div>
+
+    </div>
 {% endblock %}
 
 {% block title %}
