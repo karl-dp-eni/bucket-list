@@ -17,6 +17,16 @@
                 <p>Modifié le {{ wish.dateUpdated | date('d/m/Y') }} à {{ wish.dateUpdated| date('H:i') }}</p>
             {% endif %}
         </div>
+        <div>
+            <p>
+                <a href="{{ path('wish_delete', {'id' : wish.id}) }}">
+                    <button>Delete</button>
+                </a>
+                <a href="{{ path('wish_update', {'id': wish.id}) }}">
+                    <button>Update</button>
+                </a>
+            </p>
+        </div>
 
     </div>
 {% endblock %}

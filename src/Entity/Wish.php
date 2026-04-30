@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Repository\WishRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 class Wish
 {
@@ -13,12 +15,17 @@ class Wish
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Idea expected!')]
+    #[Assert\Length(min: 2, max: 255, minMessage: 'Min {{ min }} characters!', maxMessage: 'Max {{ max }} characters!')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\Length(max: 1024, maxMessage: 'Max {{ max }} characters!')]
     #[ORM\Column(length: 1024, nullable: true)]
     private ?string $description = null;
 
+    #[Assert\NotBlank(message: 'Username expected!')]
+    #[Assert\Length(min: 2, max: 50, minMessage: 'Min {{ min }} characters!', maxMessage: 'Max {{ max }} characters!')]
     #[ORM\Column(length: 50)]
     private ?string $author = null;
 
@@ -28,7 +35,7 @@ class Wish
     #[ORM\Column]
     private ?\DateTime $dateCreated = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTime $dateUpdated = null;
 
     public function getId(): ?int
@@ -106,5 +113,16 @@ class Wish
         $this->dateUpdated = $dateUpdated;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function create() {
+        $this->setIsPublished(true);
+        $this->setDateCreated(new \DateTime());
+    }
+
+    #[ORM\PreUpdate]
+    public function update() {
+        $this->setDateUpdated(new \DateTime());
     }
 }
