@@ -13,21 +13,27 @@
             <a href="#" class="btn btn-primary">J'ai réalisé ce souhait !</a>
         </div>
         <div class="card-footer text-body-secondary">
-            Créé par {{ wish.author }} le {{ wish.dateCreated | date('d/m/Y') }} à {{ wish.dateCreated | date('H:i') }}
+            Créé par {{ wish.user.userIdentifier }} le {{ wish.dateCreated | date('d/m/Y') }} à {{ wish.dateCreated | date('H:i') }}
             {% if wish.dateUpdated %}
                 <p>Modifié le {{ wish.dateUpdated | date('d/m/Y') }} à {{ wish.dateUpdated| date('H:i') }}</p>
             {% endif %}
         </div>
+        {% if app.user %}
         <div>
             <p>
+                {% if is_granted('WISH_DELETE', wish) %}
                 <a href="{{ path('wish_delete', {'id' : wish.id}) }}">
                     <button>Delete</button>
                 </a>
+                {% endif %}
+                {% if is_granted('WISH_EDIT', wish) %}
                 <a href="{{ path('wish_update', {'id': wish.id}) }}">
                     <button>Update</button>
                 </a>
+                {% endif %}
             </p>
         </div>
+        {% endif %}
 
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\User;
 use App\Entity\Wish;
 use App\Repository\CategoryRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -34,6 +35,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
         $categories = $manager->getRepository(Category::class)->findAll();
+        $users = $manager->getRepository(User::class)->findAll();
 
         for ($i = 0; $i < 50; $i++) {
             $wish = new Wish();
@@ -41,7 +43,7 @@ class AppFixtures extends Fixture
             $wish
                 ->setTitle('Devenir ' . $faker->jobTitle())
                 ->setDescription($faker->sentence(10))
-                ->setAuthor($faker->name())
+                ->setUser($faker->randomElement($users))
                 ->setIsPublished($faker->boolean(false))
                 ->setDateCreated($faker->dateTimeBetween('-30 days'))
                 ->setDateUpdated($faker->dateTimeBetween($wish->getDateCreated()))
