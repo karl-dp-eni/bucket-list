@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Wish;
 use App\Form\WishType;
 use App\Repository\WishRepository;
+use App\Services\Censurator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,7 @@ final class WishController extends AbstractController
         WishRepository         $wishRepository,
         Request                $request,
         EntityManagerInterface $entityManager,
+        Censurator             $censurator,
         int                    $id = null,
     ): Response
     {
@@ -65,7 +67,10 @@ final class WishController extends AbstractController
         $wishForm->handleRequest($request);
 
         if ($wishForm->isSubmitted() && $wishForm->isValid()) {
+
             $wish->setUser($this->getUser());
+            $wish->setDescription($censurator->purify($wish->getDescription()));
+
             $entityManager->persist($wish);
             $entityManager->flush();
             $this->addFlash('success', 'Idea sucessfully ' . (!$id ? 'added !' : 'updated !'));
